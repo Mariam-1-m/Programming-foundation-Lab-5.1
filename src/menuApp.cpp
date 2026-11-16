@@ -3,7 +3,8 @@
 #include "../include/colors.h"
 #include "../include/arrowGet.h"
 #include "../include/menuApp.h"
-
+#include <thread>
+#include <chrono>
 
 
 
@@ -131,6 +132,7 @@ void menuApp::observeUserKeys(){
                    displayAllEmployees();
                 break;
                 case 2:
+                std::cout<<"\033[2J\033[H"<<std::flush;
                 std::cout<<"Quitted!";
                 byte1='q';
                 return;
@@ -153,7 +155,10 @@ int age;
 std::string department;
 double salary;
 char cont;
+
  std::cout<<"\033[2J\033[H"<<std::flush;
+std::cout<<"=========================== ADD EMPLOYEE SCREEN ============================\n\n";
+
 do{
 
 if(empCount==20){
@@ -163,16 +168,26 @@ if(empCount==20){
 std::cout<<"Enter employee name : \n";
 std::cin>>name;
 
+
 std::cout<<"Enter employee age : \n";
 std::cin>>age;
+if(age<=0){
+    std::cout<<"Try again with a valid age!"<<std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    return;
+}
 
-
-std::cout<<"Enter employee department : \n";
+std::cout<<"Enter employee department (e.g HR,Finance,..) : \n";
 std::cin>>department;
 
 std::cout<<"Enter employee salary: \n";
 std::cin>>salary;
+if(salary<=0){
+    std::cout<<"Try again with a valid salary!"<<std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 
+    return;
+}
 
  employees[empCount]= Employee(name,age,department,salary);
 empCount++;
@@ -184,12 +199,13 @@ std::cin>>cont;
 
 void menuApp::displayAllEmployees(){
     std::cout<<"\033[2J\033[H"<<std::flush;
+     std::cout<<"=========================== DISPLAY OUR EMPLOYEES ==========================\n";
     for(int i=0;i<empCount;i++){
-    std::cout<<"\n"<<"Employee :"<<i+1 <<" :\n";
-    std::cout<<employees[i].getName()<<"\n";
-    std::cout<<employees[i].getAge()<<"\n";
-    std::cout<<employees[i].getDepartment()<<"\n";
-    std::cout<<employees[i].getSalary()<<"\n";
+    std::cout<<"\n"<<"Employee : "<<i+1 <<" \n";
+    std::cout<<"Name : "<<employees[i].getName()<<"\n";
+    std::cout<<"Age : "<<employees[i].getAge()<<"\n";
+    std::cout<<"Department : "<<employees[i].getDepartment()<<"\n";
+    std::cout<<"Salary : "<<employees[i].getSalary()<<"\n";
     std::cout<<"========================";
     }
     std::cin.ignore();
